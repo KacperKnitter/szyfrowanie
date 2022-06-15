@@ -6,7 +6,7 @@
         $trimedslowa=array();
 
         //funkcja przystosowująca tekst//
-         function PrzystosowanieTekstu(){
+         function przystosowanieTekstu(){
 
              global $TekstDoSzyfrowania;
              global $trimedslowa;
@@ -20,9 +20,25 @@
                      array_push($trimedslowa,trim($v));
                  }
              }
-             return ($trimedslowa);
          }
 
+            function toMorse()
+            {
+                $zaszyfrowanyMorse = "";
+                global $trimedslowa;
+                require_once('tablica_morsa.php');
+                foreach ($trimedslowa as $slowo) {
+                    for ($i = 0; $i < strlen($slowo); $i++) {
+                        $zaszyfrowanyMorse .= $morse[$slowo[$i]]." ";
+                    }
+                    $zaszyfrowanyMorse .= "    ";
+                }
+                return ($zaszyfrowanyMorse);
+
+            }
+                przystosowanieTekstu();
+                echo (toMorse());
 
 
    //    }
+?>
