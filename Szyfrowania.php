@@ -2,7 +2,7 @@
     /*if ($_SERVER["REQUEST_METHOD"] == "POST") {
          $text=$_POST['Text'];
          $tekstDoSzyfrowania=$text; */
-        $tekstDoSzyfrowania="Veni Vidi Vici";
+        $tekstDoSzyfrowania="TO JEST BARDZO TAJNY TEKST";
         $ascii_array=array();
 
         //funkcja przystosowująca tekst//
@@ -65,26 +65,59 @@
                 return($zaszyfrowanyCesar);
             }
 
+            //funkcja zamieniajaca przystosowany tekst na szyfr Vigenere//
             function toVigenere()
             {
+                $klucz = dopasowanieKlucza();
                 $zaszyfrowanyVigenere = "";
                 global $ascii_array;
-                require_once('tablica_morsa.php');
-                foreach ($ascii_array as $slowo) {
-                    for ($i = 0; $i < strlen($slowo); $i++) {
-                        $zaszyfrowanyMorse .= $morse[$slowo[$i]] . " ";
+                $i = 0;
+                require_once('tablica_cesar.php');
+                foreach ($ascii_array as $znak) {
+                    if ($znak <= 122 && $znak >= 97) {
+                        $zaszyfrowanyVigenere .= $flippedCesarMale[(($cesarMale[chr($znak)] + $cesarMale[$klucz[$i]]) % 26)];
+                        $i++;
+                    } elseif ($znak <= 90 && $znak >= 65) {
+                        $zaszyfrowanyVigenere .= $flippedCesarDuze[(($cesarDuze[chr($znak)] + $cesarMale[$klucz[$i]]) % 26)];
+                        $i++;
+                    } else {
+                        $zaszyfrowanyVigenere .= chr($znak);
+                        $i++;
                     }
-                    $zaszyfrowanyMorse .= "    ";
+
                 }
-                return ($zaszyfrowanyMorse);
+                return ($zaszyfrowanyVigenere);
 
             }
 
 
+            // dopasowyawnie słowa klucza do formatu tkstu do szyfrowania//
+            function dopasowanieKlucza()
+            {
+                //    $slowoKlucz=strtolower($_POST['slowoKlucz']);
+                $slowoKlucz = strtolower("TAJNE");
+                global $ascii_array;
+                $klucz = "";
+                $i = 0;
+                foreach ($ascii_array as $znak) {
+                    if (!(($znak <= 122 && $znak >= 97) || ($znak <= 90 && $znak >= 65))) {
+                        $klucz .= chr($znak);
+
+                    } else {
+                        while (!(ord($slowoKlucz[($i % strlen($slowoKlucz))]) <= 122 && ord($slowoKlucz[($i % strlen($slowoKlucz))]) >= 97)) {
+                            $i++;
+                        }
+                        $klucz .= $slowoKlucz[($i % strlen($slowoKlucz))];
+                        $i++;
+                    }
+                }
+                return ($klucz);
+            }
+
                 przystosowanieTekstu();
-                echo (toMorse());
-                echo (toAfini());
-
-
+             //  echo (toMorse());
+              //  echo (toAfini());
+              //  echo (dopasowanieKlucza());
+                echo (toVigenere());
    //    }
 ?>
