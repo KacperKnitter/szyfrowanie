@@ -2,8 +2,7 @@
     /*if ($_SERVER["REQUEST_METHOD"] == "POST") {
          $text=$_POST['Text'];
          $tekstDoSzyfrowania=$text; */
-        $tekstDoSzyfrowania="ala ma 
-        kota";
+        $tekstDoSzyfrowania="Veni Vidi Vici";
         $ascii_array=array();
 
         //funkcja przystosowująca tekst//
@@ -13,11 +12,9 @@
              global $tekstDoSzyfrowania;
              global $ascii_array;
 
-             $tekstToLow = strtolower($tekstDoSzyfrowania);
+             for ($i=0;$i<strlen($tekstDoSzyfrowania);$i++) {
 
-             for ($i=0;$i<strlen($tekstToLow);$i++) {
-
-                 array_push($ascii_array, ord($tekstToLow[$i]));
+                 array_push($ascii_array, ord($tekstDoSzyfrowania[$i]));
 
              }
 
@@ -32,7 +29,10 @@
                 foreach ($ascii_array as $znak) {
                     $znak = (string)$znak;
                     if (($znak <= 122 && $znak >= 97) || ($znak >= 48 && $znak <= 57)) {
-                        $zaszyfrowanyMorse .= ($morse[chr($znak)])." ";
+                        $zaszyfrowanyMorse .= ($morseMale[chr($znak)])." ";
+                    }
+                    elseif ($znak <= 90 && $znak >= 65){
+                        $zaszyfrowanyMorse .= ($morseDuze[chr($znak)])." ";
                     }
                     else {
                         $zaszyfrowanyMorse .= chr($znak)."    ";
@@ -51,11 +51,16 @@
                 $zaszyfrowanyCesar ="";
                 global $ascii_array;
                 require_once('tablica_cesar.php');
-                foreach ($ascii_array as $slowo) {
-                    for ($i = 0; $i < strlen($slowo); $i++) {
-                        $zaszyfrowanyCesar .=  $flippedCesar[((($cesar[$slowo[$i]]*$a)+$b)%26)] ;
+                foreach ($ascii_array as $znak) {
+                    if ($znak <= 122 && $znak >= 97) {
+                        $zaszyfrowanyCesar .= $flippedCesarMale[((($cesarMale[chr($znak)] * $a) + $b) % 26)];
                     }
-                    $zaszyfrowanyCesar .= " ";
+                    elseif ($znak <= 90 && $znak >= 65){
+                        $zaszyfrowanyCesar .= $flippedCesarDuze[((($cesarDuze[chr($znak)] * $a) + $b) % 26)];
+                    }
+                    else{
+                        $zaszyfrowanyCesar .= chr($znak);
+                    }
                 }
                 return($zaszyfrowanyCesar);
             }
