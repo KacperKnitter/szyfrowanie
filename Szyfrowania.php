@@ -1,41 +1,44 @@
 <?php
     /*if ($_SERVER["REQUEST_METHOD"] == "POST") {
          $text=$_POST['Text'];
-         $TekstDoSzyfrowania=$text; */
-        $TekstDoSzyfrowania="VENI";
-        $trimedslowa=array();
+         $tekstDoSzyfrowania=$text; */
+        $tekstDoSzyfrowania="ala ma 
+        kota";
+        $ascii_array=array();
 
         //funkcja przystosowująca tekst//
-         function przystosowanieTekstu(){
+         function przystosowanieTekstu()
+         {
 
-             global $TekstDoSzyfrowania;
-             global $trimedslowa;
+             global $tekstDoSzyfrowania;
+             global $ascii_array;
 
-             $TekstDoSzyfrowania=strtolower($TekstDoSzyfrowania);
-             $TekstDoSzyfrowania=trim($TekstDoSzyfrowania);
-             $slowa=explode(" ",$TekstDoSzyfrowania);
+             $tekstToLow = strtolower($tekstDoSzyfrowania);
 
-             foreach ($slowa as $v){
-                 if ($v!=NULL) {
-                     array_push($trimedslowa,trim($v));
-                 }
+             for ($i=0;$i<strlen($tekstToLow);$i++) {
+
+                 array_push($ascii_array, ord($tekstToLow[$i]));
+
              }
+
          }
 
             //funkcja zamieniajaca przystosowany tekst na kod morse //
             function toMorse()
             {
                 $zaszyfrowanyMorse = "";
-                global $trimedslowa;
+                global $ascii_array;
                 require_once('tablica_morsa.php');
-                foreach ($trimedslowa as $slowo) {
-                    for ($i = 0; $i < strlen($slowo); $i++) {
-                        $zaszyfrowanyMorse .= $morse[$slowo[$i]]." ";
+                foreach ($ascii_array as $znak) {
+                    $znak = (string)$znak;
+                    if (($znak <= 122 && $znak >= 97) || ($znak >= 48 && $znak <= 57)) {
+                        $zaszyfrowanyMorse .= ($morse[chr($znak)])." ";
                     }
-                    $zaszyfrowanyMorse .= "    ";
+                    else {
+                        $zaszyfrowanyMorse .= chr($znak)."    ";
+                    }
                 }
                 return ($zaszyfrowanyMorse);
-
             }
 
             //funkcja zamieniajaca przystosowany tekst na szyfr afiniczny//
@@ -46,9 +49,9 @@
                 $a=3;
                 $b=12;
                 $zaszyfrowanyCesar ="";
-                global $trimedslowa;
+                global $ascii_array;
                 require_once('tablica_cesar.php');
-                foreach ($trimedslowa as $slowo) {
+                foreach ($ascii_array as $slowo) {
                     for ($i = 0; $i < strlen($slowo); $i++) {
                         $zaszyfrowanyCesar .=  $flippedCesar[((($cesar[$slowo[$i]]*$a)+$b)%26)] ;
                     }
@@ -60,9 +63,9 @@
             function toVigenere()
             {
                 $zaszyfrowanyVigenere = "";
-                global $trimedslowa;
+                global $ascii_array;
                 require_once('tablica_morsa.php');
-                foreach ($trimedslowa as $slowo) {
+                foreach ($ascii_array as $slowo) {
                     for ($i = 0; $i < strlen($slowo); $i++) {
                         $zaszyfrowanyMorse .= $morse[$slowo[$i]] . " ";
                     }

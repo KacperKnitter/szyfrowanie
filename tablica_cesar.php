@@ -29,4 +29,3 @@ $cesar = array(
     "z" => "25",
 );
 $flippedCesar=array_flip($cesar);
-print_r($flippedCesar);
