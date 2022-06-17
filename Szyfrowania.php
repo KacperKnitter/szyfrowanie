@@ -4,7 +4,7 @@
     /*if ($_SERVER["REQUEST_METHOD"] == "POST") {
          $text=$_POST['Text'];
          $tekstDoSzyfrowania=$text; */
-        $tekstDoSzyfrowania="Xyzk Xkvk Xksk";
+        $tekstDoSzyfrowania="GH XNWL UBRUCN HTJWL RXOCL";
         $ascii_array=array();
 
         //funkcja przystosowująca tekst//
@@ -101,7 +101,7 @@
             function dopasowanieKlucza()
             {
                 //    $slowoKlucz=strtolower($_POST['slowoKlucz']);
-                $slowoKlucz = strtolower("TAJNE");
+                $slowoKlucz = strtolower("NT OJES TBARDZ OTAJN YTEKS");
                 global $ascii_array;
                 $klucz = "";
                 $i = 0;
@@ -182,12 +182,56 @@
                 }
             }
 
+            function fromVigenere()
+            {
+                require('tablica_cesar.php');
+                $array_klucz=array();
+                $slowoKlucz = dopasowanieKlucza();
+                // "odwracanie klucza"//
+                for ($i = 0; $i < strlen($slowoKlucz); $i++) {
+                    array_push($array_klucz, ord($slowoKlucz[$i]));
+                }
+                $klucz = "";
+                $i = 0;
+
+                foreach ($array_klucz as $znak) {
+                    if ($znak <= 122 && $znak >= 97) {
+                        $klucz .= $flippedCesarMale[((-$cesarMale[chr($znak)] + 26) % 26)];
+                    } elseif ($znak <= 90 && $znak >= 65) {
+                        $klucz .= $flippedCesarDuze[((-$cesarDuze[chr($znak)] + 36) % 26)];
+                    } else {
+                        $klucz .= chr($znak);
+                    }
+
+                }
+                $odszyfrowanyVigenere = "";
+                global $ascii_array;
+                $i = 0;
+
+
+                foreach ($ascii_array as $znak) {
+                    if ($znak <= 122 && $znak >= 97) {
+                        $odszyfrowanyVigenere .= $flippedCesarMale[(($cesarMale[chr($znak)] + $cesarMale[$klucz[$i]]) % 26)];
+                        $i++;
+                    } elseif ($znak <= 90 && $znak >= 65) {
+                        $odszyfrowanyVigenere .= $flippedCesarDuze[(($cesarDuze[chr($znak)] + $cesarMale[$klucz[$i]]) % 26)];
+                        $i++;
+                    } else {
+                        $odszyfrowanyVigenere .= chr($znak);
+                        $i++;
+                    }
+
+                }
+                return ($odszyfrowanyVigenere);
+
+            }
 
                 przystosowanieTekstu();
              //  echo (toMorse());
-                echo (toAfini());
+              //  echo (toAfini());
               //  echo (dopasowanieKlucza());
                // echo (toVigenere());
-                echo (fromAfini())
+              //  echo (fromAfini())
+                echo (fromVigenere());
    //    }
 ?>
