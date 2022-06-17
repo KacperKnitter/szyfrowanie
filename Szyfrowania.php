@@ -1,8 +1,10 @@
 <?php
+
+
     /*if ($_SERVER["REQUEST_METHOD"] == "POST") {
          $text=$_POST['Text'];
          $tekstDoSzyfrowania=$text; */
-        $tekstDoSzyfrowania="TO JEST BARDZO TAJNY TEKST";
+        $tekstDoSzyfrowania="Xyzk Xkvk Xksk";
         $ascii_array=array();
 
         //funkcja przystosowująca tekst//
@@ -25,7 +27,8 @@
             {
                 $zaszyfrowanyMorse = "";
                 global $ascii_array;
-                require_once('tablica_morsa.php');
+                require('tablica_morsa.php');
+
                 foreach ($ascii_array as $znak) {
                     $znak = (string)$znak;
                     if (($znak <= 122 && $znak >= 97) || ($znak >= 48 && $znak <= 57)) {
@@ -43,14 +46,16 @@
 
             //funkcja zamieniajaca przystosowany tekst na szyfr afiniczny//
             function toAfini()
-            {  // if (isset($_POST['cesar_a'])&&isset($_POST['cesar_b']))
+            {
+                // if (isset($_POST['cesar_a'])&&isset($_POST['cesar_b']))
                // $a=$_POST['cesar_a'];
                // $b=$_POST['cesar_b'];
                 $a=3;
                 $b=12;
                 $zaszyfrowanyCesar ="";
                 global $ascii_array;
-                require_once('tablica_cesar.php');
+                require('tablica_cesar.php');
+
                 foreach ($ascii_array as $znak) {
                     if ($znak <= 122 && $znak >= 97) {
                         $zaszyfrowanyCesar .= $flippedCesarMale[((($cesarMale[chr($znak)] * $a) + $b) % 26)];
@@ -72,7 +77,8 @@
                 $zaszyfrowanyVigenere = "";
                 global $ascii_array;
                 $i = 0;
-                require_once('tablica_cesar.php');
+                require('tablica_cesar.php');
+
                 foreach ($ascii_array as $znak) {
                     if ($znak <= 122 && $znak >= 97) {
                         $zaszyfrowanyVigenere .= $flippedCesarMale[(($cesarMale[chr($znak)] + $cesarMale[$klucz[$i]]) % 26)];
@@ -99,6 +105,7 @@
                 global $ascii_array;
                 $klucz = "";
                 $i = 0;
+
                 foreach ($ascii_array as $znak) {
                     if (!(($znak <= 122 && $znak >= 97) || ($znak <= 90 && $znak >= 65))) {
                         $klucz .= chr($znak);
@@ -114,10 +121,73 @@
                 return ($klucz);
             }
 
+            function fromAfini()
+            {   // if (isset($_POST['cesar_a'])&&isset($_POST['cesar_b']))
+                // $a=$_POST['cesar_a'];
+                // $b=$_POST['cesar_b'];
+                $a = 3;
+                $b = 12;
+                global $ascii_array;
+                $odszyfrowanyAfini = "";
+                require('tablica_cesar.php');
+                $odwrotneModulo = odwrotneModulo($a);
+                foreach ($ascii_array as $znak) {
+                    if ($znak <= 122 && $znak >= 97) {
+                        $czyModuloDodatnie = ($odwrotneModulo * ($cesarMale[chr($znak)] - $b)) % 26;
+                        if ($czyModuloDodatnie < 0) {
+                            $czyModuloDodatnie = $czyModuloDodatnie + 26;
+                        }
+                        $odszyfrowanyAfini .= $flippedCesarMale[$czyModuloDodatnie];
+                    } elseif ($znak <= 90 && $znak >= 65) {
+                        $czyModuloDodatnie = ($odwrotneModulo * ($cesarDuze[chr($znak)] - $b)) % 26;
+                        if ($czyModuloDodatnie < 0) {
+                            $czyModuloDodatnie = $czyModuloDodatnie + 26;
+                        }
+
+                        $odszyfrowanyAfini .= $flippedCesarDuze[$czyModuloDodatnie];
+                    } else {
+                        $odszyfrowanyAfini .= chr($znak);
+                    }
+                }
+                echo $odszyfrowanyAfini;
+
+            }
+
+            //funkcja obliczająca odwrotne modulo [rozszerzenie gmp nie działa :( ]//
+            function odwrotneModulo($a)
+            {
+                $b = 26;
+                $u = 1;
+                $w = $a;
+                $x = 0;
+                $z = $b;
+                while ($w != 0) {
+                    if ($w < $z) {
+                        $p = $u;
+                        $u = $x;
+                        $x = $p;
+                        $p = $w;
+                        $w = $z;
+                        $z = $p;
+                    }
+                    $q = (integer)($w / $z);
+                    $u = ($u - ($q * $x));
+                    $w = ($w - ($q * $z));
+                }
+                if ($z = 1) {
+                    if ($x < 0) {
+                        $x = $x + $b;
+                    }
+                    return $x;
+                }
+            }
+
+
                 przystosowanieTekstu();
              //  echo (toMorse());
-              //  echo (toAfini());
+                echo (toAfini());
               //  echo (dopasowanieKlucza());
-                echo (toVigenere());
+               // echo (toVigenere());
+                echo (fromAfini())
    //    }
 ?>
