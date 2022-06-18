@@ -46,7 +46,7 @@ $morseDuze = array(
     "F"=>"..-.",
     "G"=>"--.",
     "H"=>"....",
-    "U"=>"..",
+    "I"=>"..",
     "J"=>".---",
     "K"=>"-.-",
     "L"=>".-..",
@@ -65,4 +65,4 @@ $morseDuze = array(
     "Y"=>"-.--",
     "Z"=>"--..",
 );
-print_r ($flippedMorse=array_flip($morseMale));
+($flippedMorse=array_flip($morseMale));

@@ -1,12 +1,9 @@
 <?php
-
-
-    /*if ($_SERVER["REQUEST_METHOD"] == "POST") {
-         $text=$_POST['Text'];
-         $tekstDoSzyfrowania=$text; */
-        $tekstDoSzyfrowania="GH XNWL UBRUCN HTJWL RXOCL";
-        $ascii_array=array();
-
+        if(isset($_POST['Text'])) {
+            $text = $_POST['Text'];
+            $tekstDoSzyfrowania = $text;
+            $ascii_array = array();
+        }
         //funkcja przystosowująca tekst//
          function przystosowanieTekstu()
          {
@@ -47,11 +44,8 @@
             //funkcja zamieniajaca przystosowany tekst na szyfr afiniczny//
             function toAfini()
             {
-                // if (isset($_POST['cesar_a'])&&isset($_POST['cesar_b']))
-               // $a=$_POST['cesar_a'];
-               // $b=$_POST['cesar_b'];
-                $a=3;
-                $b=12;
+                $a=$_POST['cesar_a'];
+                $b=$_POST['cesar_b'];
                 $zaszyfrowanyCesar ="";
                 global $ascii_array;
                 require('tablica_cesar.php');
@@ -100,8 +94,7 @@
             // dopasowyawnie słowa klucza do formatu tkstu do szyfrowania//
             function dopasowanieKlucza()
             {
-                //    $slowoKlucz=strtolower($_POST['slowoKlucz']);
-                $slowoKlucz = strtolower("NT OJES TBARDZ OTAJN YTEKS");
+                $slowoKlucz=strtolower($_POST['slowoKlucz']);
                 global $ascii_array;
                 $klucz = "";
                 $i = 0;
@@ -122,11 +115,9 @@
             }
 
             function fromAfini()
-            {   // if (isset($_POST['cesar_a'])&&isset($_POST['cesar_b']))
-                // $a=$_POST['cesar_a'];
-                // $b=$_POST['cesar_b'];
-                $a = 3;
-                $b = 12;
+            {
+                $a=$_POST['cesar_a'];
+                $b=$_POST['cesar_b'];
                 global $ascii_array;
                 $odszyfrowanyAfini = "";
                 require('tablica_cesar.php');
@@ -149,7 +140,7 @@
                         $odszyfrowanyAfini .= chr($znak);
                     }
                 }
-                echo $odszyfrowanyAfini;
+                return ($odszyfrowanyAfini);
 
             }
 
@@ -187,13 +178,14 @@
                 require('tablica_cesar.php');
                 $array_klucz=array();
                 $slowoKlucz = dopasowanieKlucza();
+                $klucz = "";
+                $odszyfrowanyVigenere = "";
+                global $ascii_array;
+
                 // "odwracanie klucza"//
                 for ($i = 0; $i < strlen($slowoKlucz); $i++) {
                     array_push($array_klucz, ord($slowoKlucz[$i]));
                 }
-                $klucz = "";
-                $i = 0;
-
                 foreach ($array_klucz as $znak) {
                     if ($znak <= 122 && $znak >= 97) {
                         $klucz .= $flippedCesarMale[((-$cesarMale[chr($znak)] + 26) % 26)];
@@ -204,11 +196,10 @@
                     }
 
                 }
-                $odszyfrowanyVigenere = "";
-                global $ascii_array;
+
+
                 $i = 0;
-
-
+                // odszyfrowywanie//
                 foreach ($ascii_array as $znak) {
                     if ($znak <= 122 && $znak >= 97) {
                         $odszyfrowanyVigenere .= $flippedCesarMale[(($cesarMale[chr($znak)] + $cesarMale[$klucz[$i]]) % 26)];
@@ -226,12 +217,52 @@
 
             }
 
-                przystosowanieTekstu();
-             //  echo (toMorse());
-              //  echo (toAfini());
-              //  echo (dopasowanieKlucza());
-               // echo (toVigenere());
-              //  echo (fromAfini())
-                echo (fromVigenere());
-   //    }
+
+            function wybor(){
+             if(isset($_POST['akcja'])&&isset($_POST['Text'])){
+              switch ($_POST['akcja']){
+                  case "na Morsa":
+
+                          przystosowanieTekstu();
+                          $_POST['Przerobiony']=toMorse();
+
+                      break;
+                  case "na Vigenere":
+                      if(isset($_POST['slowoKlucz'])&&$_POST['slowoKlucz']!=null) {
+                          przystosowanieTekstu();
+                          $_POST['Przerobiony'] = toVigenere();
+                      }
+                      break;
+                  case "na Afini":
+                      if(isset($_POST['cesar_a'])&&isset($_POST['cesar_b'])&& $_POST['cesar_a']!=null&& $_POST['cesar_b']!=null) {
+                          przystosowanieTekstu();
+                          $_POST['Przerobiony'] = toAfini();
+                      }
+                      break;
+                  case "z Morsa":
+
+                          przystosowanieTekstu();
+                          $_POST['Przerobiony']=toMorse();
+
+                      break;
+                  case "z Afini":
+                      if(isset($_POST['cesar_a'])&&isset($_POST['cesar_b'])&& $_POST['cesar_a']!=null&& $_POST['cesar_b']!=null) {
+                          przystosowanieTekstu();
+                          $_POST['Przerobiony'] = fromAfini();
+                      }
+                      break;
+                  case "z Vigenere":
+                      if(isset($_POST['slowoKlucz'])&&$_POST['slowoKlucz']!=null) {
+                          przystosowanieTekstu();
+                          $_POST['Przerobiony'] = fromVigenere();
+                      }
+                      break;
+              }
+
+
+             }
+
+            }
+            wybor();
+
 ?>
