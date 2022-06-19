@@ -113,7 +113,7 @@
                 }
                 return ($klucz);
             }
-
+            //funkcja odszyfrowująca szyfr Afiniczny//
             function fromAfini()
             {
                 $a=$_POST['cesar_a'];
@@ -173,6 +173,7 @@
                 }
             }
 
+            //funkcja odszyfrowująca szyfr Vigenere//
             function fromVigenere()
             {
                 require('tablica_cesar.php');
