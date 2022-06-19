@@ -219,6 +219,29 @@
             }
 
 
+            function fromMorse()
+            {
+                require("tablica_morsa.php");
+                global $tekstDoSzyfrowania;
+                $tablicaZmorse = array();
+                $replacedTekst = str_replace("     ", " " . chr(1), $tekstDoSzyfrowania);
+                $tablicaZmorse = explode(" ", $replacedTekst);
+                $klucze = array_keys($flippedMorse);
+                $przerobionyMorse = "";
+
+                foreach ($tablicaZmorse as $znak) {
+                    if (in_array($znak, $klucze)) {
+                        $przerobionyMorse .= $flippedMorse[$znak];
+                    } elseif ($znak = chr(3)) {
+                        $przerobionyMorse .= " ";
+                    } else {
+                        $przerobionyMorse .= $znak;
+                        echo $znak;
+                    }
+                }
+                return ($przerobionyMorse);
+            }
+
             function wybor(){
              if(isset($_POST['akcja'])&&isset($_POST['Text'])){
               switch ($_POST['akcja']){
@@ -242,8 +265,7 @@
                       break;
                   case "z Morsa":
 
-                          przystosowanieTekstu();
-                          $_POST['Przerobiony']=toMorse();
+                          $_POST['Przerobiony']=fromMorse();
 
                       break;
                   case "z Afini":
@@ -259,8 +281,6 @@
                       }
                       break;
               }
-
-
              }
 
             }

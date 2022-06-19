@@ -59,8 +59,8 @@
         <div style="margin-top: 2rem" class="col-lg-4 col-md-12">
                 <div style="text-align: center;"/>
                     Wzór szyfru Afinicznego: ax+b=c<br>
-                    Afiniczny a <br><input type="number" name="cesar_a" value="<?php if(isset($_POST['cesar_a'])) echo $_POST['cesar_a'] ?>"><br>
-                    Afiniczny b <br><input type="number" name="cesar_b" value="<?php if(isset($_POST['cesar_b'])) echo $_POST['cesar_b'] ?>"><br>
+                    Afiniczny a <br><input type="number" name="cesar_a" min="-9" max="9" value="<?php if(isset($_POST['cesar_a'])) echo $_POST['cesar_a'] ?>"><br>
+                    Afiniczny b <br><input type="number" name="cesar_b" min="-25" max="25"  value="<?php if(isset($_POST['cesar_b'])) echo $_POST['cesar_b'] ?>"><br>
                     Słowo klucz Vigenere <br> <input type="text" name="slowoKlucz" value="<?php if(isset($_POST['slowoKlucz'])) echo $_POST['slowoKlucz'] ?>"><br>
                     <select style="margin-top: 0.5rem;margin-bottom: 0.5rem" name="akcja" aria-label="Default select example">
                         <option selected>Wybierz co chcesz zrobic </option>
@@ -77,7 +77,7 @@
 
         <div style="margin-top: 2rem" class="col-lg-4 col-md-12">
             <div style="text-align: center;"/>
-                Output<br> <textarea  style="height: 10rem;width:18rem " id="Output"  name="Przerobiony" ><?php if(isset($_POST['Przerobiony'])) echo $_POST['Przerobiony']?></textarea><br>
+                Output<br> <textarea  style="height: 10rem;width:18rem " id="Output"  name="Output" ><?php if(isset($_POST['Przerobiony'])) echo $_POST['Przerobiony']?></textarea><br>
                 <button class="btn btn-secondary" onclick="downloadOutput()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-down" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1h-2z"/>
