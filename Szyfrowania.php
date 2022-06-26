@@ -171,6 +171,9 @@
                     }
                     return $x;
                 }
+                else {
+                    return ('blad');
+                }
             }
 
             //funkcja odszyfrowująca szyfr Vigenere//
@@ -255,12 +258,21 @@
                       if(isset($_POST['slowoKlucz'])&&$_POST['slowoKlucz']!=null) {
                           przystosowanieTekstu();
                           $_POST['Przerobiony'] = toVigenere();
+
+                      }
+                      else{
+                          alert("Musisz podać słowo klucz");
                       }
                       break;
                   case "na Afini":
                       if(isset($_POST['cesar_a'])&&isset($_POST['cesar_b'])&& $_POST['cesar_a']!=null&& $_POST['cesar_b']!=null) {
                           przystosowanieTekstu();
-                          $_POST['Przerobiony'] = toAfini();
+                          if($_POST["cesar_a"]%2==0){
+                              alert("podane a nie ma odwrotnego modulo");
+                          }
+                          else {
+                              $_POST['Przerobiony'] = toAfini();
+                          }
                       }
                       break;
                   case "z Morsa":
@@ -271,7 +283,12 @@
                   case "z Afini":
                       if(isset($_POST['cesar_a'])&&isset($_POST['cesar_b'])&& $_POST['cesar_a']!=null&& $_POST['cesar_b']!=null) {
                           przystosowanieTekstu();
-                          $_POST['Przerobiony'] = fromAfini();
+                          if($_POST["cesar_a"]%2==0){
+                              alert("podane a nie ma odwrotnego modulo");
+                          }
+                          else {
+                              $_POST['Przerobiony'] = fromAfini();
+                          }
                       }
                       break;
                   case "z Vigenere":
@@ -279,11 +296,19 @@
                           przystosowanieTekstu();
                           $_POST['Przerobiony'] = fromVigenere();
                       }
+                      else{
+                          alert("Musisz podać słowo klucz");
+                      }
                       break;
               }
              }
 
             }
-            wybor();
 
+            function alert($msg)
+            {
+                echo "<script type='text/javascript'>alert('$msg');</script>";
+            }
+
+wybor();
 ?>
